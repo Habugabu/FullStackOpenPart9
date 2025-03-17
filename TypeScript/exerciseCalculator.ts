@@ -1,7 +1,7 @@
 const calculateExercises = (
   hours: number[],
   target: number
-): exerciseResult => {
+): ExerciseResult => {
   const periodLength = hours.length;
   const average =
     hours.reduce((partialSum, a) => partialSum + a, 0) / periodLength;
@@ -28,7 +28,7 @@ const calculateExercises = (
   };
 };
 
-interface exerciseResult {
+interface ExerciseResult {
   periodLength: number;
   trainingDays: number;
   success: boolean;
@@ -36,4 +36,33 @@ interface exerciseResult {
   ratingDescription: string;
   target: number;
   average: number;
+}
+
+interface ExerciseTarget {
+  hours: number[];
+  target: number;
+}
+const parseExerciseArguments = (args: string[]): ExerciseTarget => {
+  if (args.length < 4) throw new Error("Not enough arguments");
+  const hours = args.slice(3).map((s) => Number(s));
+
+  if (!isNaN(Number(args[2])) && hours.every((n) => !isNaN(n))) {
+    return {
+      target: Number(args[2]),
+      hours,
+    };
+  } else {
+    throw new Error("Provided values were not numbers!");
+  }
+};
+
+try {
+  const { target, hours } = parseExerciseArguments(process.argv);
+  console.log(calculateExercises(hours, target));
+} catch (error: unknown) {
+  let errorMessage = "Something bad happened.";
+  if (error instanceof Error) {
+    errorMessage += " Error: " + error.message;
+  }
+  console.log(errorMessage);
 }
