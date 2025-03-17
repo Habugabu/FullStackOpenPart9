@@ -1,7 +1,7 @@
 import express from "express";
 import patientService from "../services/patientService";
 import { Response } from "express";
-import { NonSensitivePatient } from "../types";
+import { NonSensitivePatient, Patient } from "../types";
 import toNewPatient from "../utils";
 import { z } from "Zod";
 
@@ -9,6 +9,16 @@ const router = express.Router();
 
 router.get("/", (_req, res: Response<NonSensitivePatient[]>) => {
   res.send(patientService.getNonSensitivePatients());
+});
+
+router.get("/:id", (req, res: Response<Patient>) => {
+  const patient = patientService.findById(req.params.id);
+
+  if (patient) {
+    res.status(200).send(patient);
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 router.post("/", (req, res) => {
