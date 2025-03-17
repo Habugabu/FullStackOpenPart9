@@ -9,8 +9,14 @@ router.get("/", (_req, res: Response<Diagnosis[]>) => {
   res.send(diagnosisService.getDiagnoses());
 });
 
-router.post("/", (_req, res) => {
-  res.send("Saving a diagnosis!");
+router.get("/:code", (req, res: Response<Diagnosis>) => {
+  const diagnosis = diagnosisService.findByCode(req.params.code);
+
+  if (diagnosis) {
+    res.status(200).send(diagnosis);
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 export default router;

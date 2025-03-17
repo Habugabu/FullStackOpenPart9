@@ -8,11 +8,12 @@ const getDiagnoses = (): Diagnosis[] => {
   return diagnoses;
 };
 
-const addDiagnosis = () => {
-  return null;
+const findByCode = (code: string): Diagnosis | undefined => {
+  const diagnosis = diagnoses.find((d) => d.code === code);
+  return diagnosis;
 };
 
 export default {
   getDiagnoses,
-  addDiagnosis,
+  findByCode,
 };
